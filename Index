@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>O₂ Transport Calculator</title>
+<style>
+:root{--bg:#fff6fa;--card:#ffffff;--tx:#3d3552;--mu:#8a82a0;--bd:#f0e4f3;--pk:#ffd6e8;--mn:#d3f5e4;--lv:#e4dcfa;--pc:#ffe6d2;--sk:#d6edfb;--ac:#9b7fe8;--ok:#2f9e6b;--wn:#c98a2b;--er:#d9506f;--okb:#d3f5e4;--wnb:#fff0cc;--erb:#ffdbe3;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1d1828;--card:#2a2339;--tx:#f1ecfb;--mu:#b3a9cc;--bd:#3d3350;--pk:#5a2f48;--mn:#24473a;--lv:#3a3160;--pc:#553a28;--sk:#26445a;--ac:#b9a2ff;--ok:#6fe0a8;--wn:#f2c36b;--er:#ff8fa8;--okb:#24473a;--wnb:#52431f;--erb:#5a2a37;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1d1828;--card:#2a2339;--tx:#f1ecfb;--mu:#b3a9cc;--bd:#3d3350;--pk:#5a2f48;--mn:#24473a;--lv:#3a3160;--pc:#553a28;--sk:#26445a;--ac:#b9a2ff;--ok:#6fe0a8;--wn:#f2c36b;--er:#ff8fa8;--okb:#24473a;--wnb:#52431f;--erb:#5a2a37;color-scheme:dark}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:"Sarabun","Noto Sans Thai","Prompt",system-ui,-apple-system,sans-serif;font-size:16px;line-height:1.4}
+.w{max-width:560px;margin:0 auto;padding:14px 14px 30px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:6px 0 14px}
+h1{font-size:20px;margin:0}
+.sub{color:var(--mu);font-size:13px}
+.card{background:var(--card);border-radius:22px;padding:16px;margin-bottom:14px;box-shadow:0 4px 14px rgba(155,127,232,.12);border:1px solid var(--bd)}
+.card h2{font-size:16px;margin:0 0 12px;display:flex;align-items:center;gap:8px}
+.badge{width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:14px}
+.c1 .badge{background:var(--pk)}.c2 .badge{background:var(--sk)}.c3 .badge{background:var(--mn)}.c4 .badge{background:var(--lv)}
+label{display:block;font-size:13px;color:var(--mu);margin:0 0 4px 2px}
+.f{margin-bottom:12px}
+input,select{width:100%;font:inherit;padding:10px 12px;border:2px solid var(--bd);border-radius:14px;background:var(--bg);color:var(--tx);min-width:0}
+input:focus,select:focus{outline:none;border-color:var(--ac)}
+button{font:inherit;color:var(--tx);cursor:pointer}
+.nf{display:flex;gap:6px;align-items:center}
+.nf button{flex:0 0 42px;height:42px;border-radius:50%;border:none;background:var(--lv);font-size:22px;line-height:1}
+.nf input{text-align:center;font-size:18px;font-weight:700}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.seg button,.chips button{border:2px solid var(--bd);background:var(--bg);border-radius:16px;padding:10px 6px;font-size:15px}
+.seg button.on{background:var(--pk);border-color:var(--ac);font-weight:700}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.chips button{padding:7px 14px;border-radius:999px;font-size:14px}
+.chips button.on{background:var(--mn);border-color:var(--ok);font-weight:700}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cy{background:var(--bg);border-radius:18px;padding:12px;margin-bottom:10px}
+.cyh{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-weight:700;font-size:15px}
+.cyh button{border:none;background:var(--pk);border-radius:999px;padding:3px 12px;font-size:13px}
+.cyu{font-size:13px;color:var(--mu);margin-top:6px}
+.add{width:100%;border:2px dashed var(--ac);background:transparent;border-radius:16px;padding:10px;color:var(--ac);font-weight:700}
+details summary{cursor:pointer;font-weight:700;list-style:none}
+details summary::-webkit-details-marker{display:none}
+details .in{margin-top:12px}
+.chk{display:flex;gap:8px;align-items:center;font-size:14px}
+.chk input{width:auto}
+.st{border-radius:20px;padding:18px 12px;text-align:center;margin-bottom:12px}
+.st .em{font-size:38px;line-height:1}
+.st b{display:block;font-size:19px;margin-top:4px}
+.st small{display:block;font-size:13px;margin-top:4px}
+.ok{background:var(--okb);color:var(--ok)}.wn{background:var(--wnb);color:var(--wn)}.er{background:var(--erb);color:var(--er)}
+.bar{height:14px;border-radius:99px;background:var(--bg);overflow:hidden;margin:6px 0 4px}
+.bar i{display:block;height:100%;border-radius:99px;transition:width .3s}
+.ok i{background:var(--ok)}.wn i{background:var(--wn)}.er i{background:var(--er)}
+.bt{font-size:13px;color:var(--mu);display:flex;justify-content:space-between;margin-bottom:10px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+td{padding:7px 2px;border-bottom:1px dashed var(--bd)}td:last-child{text-align:right;font-weight:700}
+.pr{width:100%;border:none;background:var(--ac);color:#fff;border-radius:18px;padding:13px;font-size:16px;font-weight:700}
+@media (prefers-color-scheme:dark){.pr{color:#1d1828}}
+.lang{border:2px solid var(--bd);background:var(--card);border-radius:999px;padding:6px 14px;font-weight:700}
+.note{font-size:12px;color:var(--mu);margin-top:10px}
+.hid{display:none}
+.pd{display:none}
+@media print{body{background:#fff;color:#000}.np{display:none!important}.pd{display:block;margin-bottom:8px;font-size:13px}.card{box-shadow:none;break-inside:avoid;border:1px solid #bbb}:root{--bg:#fff;--card:#fff;--tx:#000;--bd:#bbb}}
+</style>
+</head>
+<body>
+<div class="w">
+<div class="top">
+ <div><h1>🫁 <span data-k="title"></span></h1><div class="sub" data-k="sub"></div></div>
+ <button class="lang np" id="lang" onclick="toggleLang()">EN</button>
+</div>
+<div class="pd" id="pd"></div>
+
+<div class="card c1">
+ <h2><span class="badge">💨</span><span data-k="s1"></span></h2>
+ <div class="seg np">
+  <button id="b1" onclick="setMode(1)"></button>
+  <button id="b2" onclick="setMode(2)"></button>
+ </div>
+ <div id="flowbox" class="f"><label data-k="flow"></label><div class="nf" data-id="flow" data-v="2" data-s="0.5" data-mx="30"></div></div>
+ <div id="venbox" class="hid">
+  <div class="g2"><div class="f"><label data-k="vt"></label><div class="nf" data-id="vt" data-v="450" data-s="10" data-mx="2000"></div></div><div class="f"><label data-k="rr"></label><div class="nf" data-id="rr" data-v="18" data-s="1" data-mx="80"></div></div></div>
+  <div class="g2">
+   <div class="f"><label data-k="mv"></label><div class="nf" data-id="mv" data-v="8.1" data-s="0.5" data-mx="60"></div></div>
+   <div class="f"><label data-k="bf"></label><div class="nf" data-id="bf" data-v="0" data-s="0.5" data-mx="30"></div></div>
+  </div>
+  <div class="f"><label>FiO₂ (%)</label><div class="nf" data-id="fio2" data-v="100" data-s="5" data-mn="21" data-mx="100"></div></div>
+ </div>
+</div>
+
+<div class="card c2">
+ <h2><span class="badge">⏱️</span><span data-k="s2"></span></h2>
+ <div class="g2">
+  <div class="f" style="grid-column:1/-1"><label data-k="tt"></label><div class="g2"><div><div class="nf" data-id="tth" data-v="1" data-s="1" data-mx="48"></div><div class="cyu" style="text-align:center" data-k="hr"></div></div><div><div class="nf" data-id="ttm" data-v="0" data-s="5" data-mx="59"></div><div class="cyu" style="text-align:center" data-k="mn"></div></div></div></div>
+  <div class="f" style="grid-column:1/-1"><label data-k="rs"></label><div class="g2"><div><div class="nf" data-id="rsh" data-v="0" data-s="1" data-mx="24"></div><div class="cyu" style="text-align:center" data-k="hr"></div></div><div><div class="nf" data-id="rsm" data-v="30" data-s="5" data-mx="59"></div><div class="cyu" style="text-align:center" data-k="mn"></div></div></div></div>
+ </div>
+ <div class="chk f"><input type="checkbox" id="bmv" onchange="calc()"><span data-k="bmv"></span></div>
+ <div class="f"><div class="nf" data-id="bmvf" data-v="15" data-s="1" data-mx="60"></div></div>
+</div>
+
+<div class="card c3">
+ <h2><span class="badge">🧪</span><span data-k="s3"></span></h2>
+ <div id="cyl"></div>
+ <button class="add np" onclick="addCyl()" data-k="add"></button>
+</div>
+
+<div class="card c4 np">
+ <details>
+  <summary>⚙️ <span data-k="adv"></span></summary>
+  <div class="in">
+   <div class="f"><label data-k="extra"></label><div class="nf" data-id="extra" data-v="0" data-s="1" data-mx="30"></div></div>
+   <div class="f"><label data-k="res"></label><div class="nf" data-id="resid" data-v="200" data-s="50" data-mx="1000"></div></div>
+   <div class="f" id="vmbox"><label data-k="vm"></label><select id="vmode" onchange="calc()"></select></div>
+   <div class="chk"><input type="checkbox" id="round" onchange="calc()"><span data-k="round"></span></div>
+  </div>
+ </details>
+</div>
+
+<div class="card">
+ <h2><span class="badge" style="background:var(--pc)">📋</span><span data-k="out"></span></h2>
+ <div id="status" class="st"></div>
+ <div id="barw"></div>
+ <table id="tbl"></table>
+ <div class="note" data-k="note"></div>
+</div>
+
+<button class="pr np" onclick="window.print()" data-k="print"></button>
+<div class="note" data-k="disc"></div>
+</div>
+
+<script>
+var PRE={M60:[1699,2216],M90:[2549,2216],M150:[4248,2015]};
+var L='th',mode=1,cyls=[{t:'M150',p:2000,u:'psi',cap:4248,sp:2015}];
+var D={
+th:{vt:'Tidal volume (mL)',rr:'RR (ครั้ง/นาที)',bmv:'เผื่อกรณีเลวร้าย: ต้องใช้ BMV แทน (flow L/min ด้านล่าง)',ru:'ใช้ตลอดเดินทาง (ปกติ)',title:'คำนวณ O₂ ตอนส่งต่อผู้ป่วย',sub:'Pre-transport Oxygen Calculator',s1:'ให้ O₂ แบบไหน',s2:'เวลา',s3:'ถังออกซิเจน',m1:'😮‍💨 หายใจเอง',m2:'🖥️ เครื่องช่วยหายใจ',flow:'Flow O₂ (L/min)',mv:'ExpMinVol (L/min)',bf:'Base flow (L/min)',tt:'เวลาเดินทาง',rs:'เวลาสำรอง',hr:'ชั่วโมง',mn:'นาที',hs:'ชม.',ds:'วัน',add:'＋ เพิ่มถัง',adv:'ตั้งค่าเพิ่มเติม',extra:'O₂ เพิ่ม เช่น พ่นยา, BMV (L/min)',res:'ความดันเหลือสำรอง (psi)',vm:'ชนิดเครื่องช่วยหายใจ',v1:'ผสม air-O₂ (blender)',v2:'ใช้ O₂ 100% ขับเคลื่อน (เผื่อสูงสุด)',round:'ปัด Tank factor M150 = 2 ตามสไลด์',out:'ผลลัพธ์',cyl:'ถัง',press:'ความดันตอนนี้',custom:'กำหนดเอง',capL:'ความจุ (L)',spP:'Service psi',del:'ลบ',print:'🖨️ พิมพ์ / บันทึก PDF',
+rf:'ใช้ O₂ รวม',rn:'ต้องใช้ (รวมสำรอง)',ra:'มี O₂ ใช้ได้',rd:'ใช้ได้นาน',rm:'ส่วนต่าง',have:'มี',need:'ต้องการ',okT:'เพียงพอ',wnT:'เพียงพอแต่ใกล้เคียง เพิ่มถังจะดีกว่า',erT:'ไม่เพียงพอ ต้องเพิ่มถัง',
+note:'Usable O₂ = (psi ตอนนี้ − psi สำรอง) × Tank factor | Tank factor = ความจุ ÷ Service psi | 1 bar = 14.5 psi',
+disc:'เครื่องมือช่วยคำนวณเท่านั้น ใช้ร่วมกับดุลยพินิจทางคลินิก และตรวจ manifold / pressure decay test ก่อนเคลื่อนย้ายทุกครั้ง',min:'นาที',L:'ลิตร',date:'พิมพ์เมื่อ'},
+en:{vt:'Tidal volume (mL)',rr:'RR (/min)',bmv:'Worst case: switch to BMV (flow L/min below)',ru:'Used during transport (normal)',title:'O₂ Transport Calculator',sub:'Pre-transport Oxygen Calculator',s1:'Oxygen delivery',s2:'Time',s3:'Oxygen cylinders',m1:'😮‍💨 Spontaneous',m2:'🖥️ Ventilator',flow:'O₂ flow (L/min)',mv:'ExpMinVol (L/min)',bf:'Base flow (L/min)',tt:'Transport time',rs:'Reserve time',hr:'hours',mn:'minutes',hs:'h',ds:'d',add:'＋ Add cylinder',adv:'More settings',extra:'Extra O₂ e.g. nebulizer, BMV (L/min)',res:'Residual pressure (psi)',vm:'Ventilator type',v1:'Air-O₂ blender',v2:'100% O₂ driven (worst case)',round:'Round M150 tank factor to 2 (per slide)',out:'Results',cyl:'Cylinder',press:'Current pressure',custom:'Custom',capL:'Capacity (L)',spP:'Service psi',del:'Remove',print:'🖨️ Print / Save PDF',
+rf:'Total O₂ use',rn:'Required (incl. reserve)',ra:'Usable O₂ available',rd:'Endurance',rm:'Margin',have:'Have',need:'Need',okT:'Sufficient',wnT:'Sufficient but marginal, consider adding a cylinder',erT:'Insufficient, add cylinders',
+note:'Usable O₂ = (current psi − residual psi) × Tank factor | Tank factor = capacity ÷ service psi | 1 bar = 14.5 psi',
+disc:'Calculation aid only. Use with clinical judgment; check the manifold and pressure decay test before every transport.',min:'min',L:'L',date:'Printed'}};
+function T(k){return D[L][k]}
+function $(i){return document.getElementById(i)}
+function num(i){var v=parseFloat($(i).value);return isFinite(v)?v:0}
+function buildNf(){document.querySelectorAll('.nf').forEach(function(e){var id=e.dataset.id,s=+e.dataset.s;e.innerHTML='<button type="button" onclick="stp(\''+id+'\','+(-s)+')">−</button><input id="'+id+'" type="number" inputmode="decimal" value="'+e.dataset.v+'" min="'+(e.dataset.mn||0)+'" max="'+(e.dataset.mx||'')+'" step="'+s+'" oninput="calc(\''+id+'\')"><button type="button" onclick="stp(\''+id+'\','+s+')">+</button>'})}
+function stp(id,d){var el=$(id),v=(parseFloat(el.value)||0)+d,mn=el.min!==''?+el.min:0;if(v<mn)v=mn;if(el.max!==''&&v>+el.max)v=+el.max;el.value=Math.round(v*100)/100;calc(id)}
+function setMode(m){mode=m;calc()}
+function fill(){
+ document.querySelectorAll('[data-k]').forEach(function(e){e.textContent=T(e.dataset.k)});
+ $('b1').textContent=T('m1');$('b2').textContent=T('m2');
+ var v=$('vmode').value||'1';$('vmode').innerHTML='<option value="1">'+T('v1')+'</option><option value="2">'+T('v2')+'</option>';$('vmode').value=v;
+ $('lang').textContent=L==='th'?'EN':'TH';document.documentElement.lang=L;
+ $('pd').textContent=T('title')+' · '+T('date')+' '+new Date().toLocaleString(L==='th'?'th-TH':'en-GB');
+ drawCyl();calc();
+}
+function toggleLang(){L=L==='th'?'en':'th';fill()}
+function drawCyl(){
+ var h='';
+ cyls.forEach(function(c,i){
+  var ch='';['M60','M90','M150','C'].forEach(function(t){ch+='<button type="button" class="'+(c.t===t?'on':'')+'" onclick="upd('+i+',\'t\',\''+t+'\',true)">'+(t==='C'?T('custom'):t)+'</button>'});
+  h+='<div class="cy"><div class="cyh"><span>'+T('cyl')+' '+(i+1)+'</span>'+(cyls.length>1?'<button class="np" onclick="delCyl('+i+')">'+T('del')+'</button>':'')+'</div>'+
+  '<div class="chips np">'+ch+'</div>'+
+  '<div class="g2"><div><label>'+T('press')+'</label><input type="number" inputmode="decimal" value="'+c.p+'" oninput="upd('+i+',\'p\',this.value)"></div>'+
+  '<div><label>&nbsp;</label><select onchange="upd('+i+',\'u\',this.value)"><option'+(c.u==='psi'?' selected':'')+'>psi</option><option'+(c.u==='bar'?' selected':'')+'>bar</option></select></div></div>'+
+  (c.t==='C'?'<div class="g2" style="margin-top:8px"><div><label>'+T('capL')+'</label><input type="number" inputmode="decimal" value="'+c.cap+'" oninput="upd('+i+',\'cap\',this.value)"></div><div><label>'+T('spP')+'</label><input type="number" inputmode="decimal" value="'+c.sp+'" oninput="upd('+i+',\'sp\',this.value)"></div></div>':'')+
+  '<div class="cyu" id="cu'+i+'"></div></div>';
+ });
+ $('cyl').innerHTML=h;
+}
+function upd(i,k,v,redraw){
+ cyls[i][k]=(k==='t'||k==='u')?v:(parseFloat(v)||0);
+ if(k==='t'&&PRE[v]){cyls[i].cap=PRE[v][0];cyls[i].sp=PRE[v][1];if(cyls[i].u==='psi'&&cyls[i].p>cyls[i].sp)cyls[i].p=cyls[i].sp}
+ if(redraw)drawCyl();calc();
+}
+function addCyl(){cyls.push({t:'M150',p:2000,u:'psi',cap:4248,sp:2015});drawCyl();calc()}
+function delCyl(i){cyls.splice(i,1);drawCyl();calc()}
+function hm(m){if(!isFinite(m))return '∞';m=Math.round(m);var d=Math.floor(m/1440),h=Math.floor(m%1440/60),r=m%60,s='';if(d)s+=d+' '+T('ds')+' ';if(h)s+=h+' '+T('hs')+' ';if(r||!s)s+=r+' '+T('min');return s.trim()}
+function f(n,d){return n.toLocaleString('en-US',{maximumFractionDigits:d===undefined?0:d})}
+function calc(src){
+ if(src==='vt'||src==='rr'){$('mv').value=Math.round(num('vt')*num('rr')/10)/100}
+ var vent=mode===2;
+ $('b1').classList.toggle('on',!vent);$('b2').classList.toggle('on',vent);
+ $('venbox').classList.toggle('hid',!vent);$('flowbox').classList.toggle('hid',vent);$('vmbox').classList.toggle('hid',!vent);
+ var flow;
+ if(vent){var tot=num('mv')+num('bf'),fi=Math.min(Math.max(num('fio2'),21),100)/100;
+  flow=$('vmode').value==='2'?tot:tot*(fi-0.21)/0.79;
+ }else flow=num('flow');
+ flow+=num('extra');
+ var tt=num('tth')*60+num('ttm'),rsv=num('rsh')*60+num('rsm'),normal=flow*tt,wf=($('bmv').checked?Math.max(flow,num('bmvf')):flow),time=tt+rsv,need=wf*time,avail=0,rows='',resid=num('resid');
+ cyls.forEach(function(c,i){
+  var psi=c.u==='bar'?c.p*14.5:c.p;
+  var tf=$('round').checked&&c.t==='M150'?2:(c.sp>0?c.cap/c.sp:0);
+  var up=Math.max(psi-resid,0),u=up*tf;avail+=u;
+  rows+='<tr><td>'+T('cyl')+' '+(i+1)+'</td><td>'+f(u)+' '+T('L')+'</td></tr>';
+  var e=$('cu'+i);if(e)e.textContent='≈ '+f(u)+' '+T('L')+' · '+f(up)+' psi × '+f(tf,2)+' L/psi';
+ });
+ var dur=wf>0?avail/wf:Infinity,margin=avail-need,cls,em,txt;
+ if(avail<need){cls='er';em='🚨';txt=T('erT')}else if(avail<need*1.2){cls='wn';em='😅';txt=T('wnT')}else{cls='ok';em='🎉';txt=T('okT')}
+ var st=$('status');st.className='st '+cls;
+ st.innerHTML='<div class="em">'+em+'</div><b>'+txt+'</b><small>'+T('rd')+' '+hm(dur)+'</small>';
+ var pct=need>0?Math.min(avail/need*100,100):100;
+ $('barw').innerHTML='<div class="'+cls+'"><div class="bar"><i style="width:'+pct+'%"></i></div></div><div class="bt"><span>'+T('have')+' '+f(avail)+' '+T('L')+'</span><span>'+T('need')+' '+f(need)+' '+T('L')+'</span></div>';
+ $('tbl').innerHTML='<tr><td>'+T('rf')+'</td><td>'+f(flow,1)+' L/min</td></tr>'+'<tr><td>'+T('ru')+' ('+hm(tt)+')</td><td>'+f(normal)+' '+T('L')+'</td></tr>'+
+ '<tr><td>'+T('rn')+' ('+hm(time)+')</td><td>'+f(need)+' '+T('L')+'</td></tr>'+rows+
+ '<tr><td><b>'+T('ra')+'</b></td><td>'+f(avail)+' '+T('L')+'</td></tr>'+
+ '<tr><td>'+T('rm')+'</td><td style="color:var(--'+(margin<0?'er':'ok')+')">'+(margin>=0?'+':'')+f(margin)+' '+T('L')+'</td></tr>';
+}
+buildNf();fill();
+</script>
+</body>
+</html>
